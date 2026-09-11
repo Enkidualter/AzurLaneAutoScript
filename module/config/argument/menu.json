@@ -26,6 +26,7 @@
       "Event",
       "Event2",
       "Raid",
+      "RaidLose",
       "Hospital",
       "Coalition",
       "EventShop",

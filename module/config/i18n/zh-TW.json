@@ -82,6 +82,10 @@
       "name": "共鬥活動",
       "help": ""
     },
+    "RaidLose": {
+      "name": "共鬥刷好感(故意輸)",
+      "help": ""
+    },
     "Hospital": {
       "name": "深谷来信",
       "help": ""
@@ -1351,6 +1355,19 @@
     "UseTicket": {
       "name": "使用演習券",
       "help": ""
+    }
+  },
+  "RaidLose": {
+    "_info": {
+      "name": "共鬥刷好感設定",
+      "help": "需要事先把隊伍配成必輸，共鬥戰敗不掉心情。如果意外打贏，任務會自動關閉"
+    },
+    "Mode": {
+      "name": "難度",
+      "help": "",
+      "easy": "簡單",
+      "normal": "普通",
+      "hard": "困難"
     }
   },
   "RaidDaily": {

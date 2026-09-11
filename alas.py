@@ -379,6 +379,10 @@ class AzurLaneAutoScript:
         from module.raid.run import RaidRun
         RaidRun(config=self.config, device=self.device).run()
 
+    def raid_lose(self):
+        from module.raid.lose import RaidLose
+        RaidLose(config=self.config, device=self.device).run()
+
     def hospital(self):
         from module.event_hospital.hospital import Hospital
         Hospital(config=self.config, device=self.device).run()

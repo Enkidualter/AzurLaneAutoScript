@@ -3062,6 +3062,162 @@
       }
     }
   },
+  "RaidLose": {
+    "Scheduler": {
+      "Enable": {
+        "type": "checkbox",
+        "value": false,
+        "option": [
+          true,
+          false
+        ]
+      },
+      "NextRun": {
+        "type": "datetime",
+        "value": "2020-01-01 00:00:00",
+        "validate": "datetime"
+      },
+      "Command": {
+        "type": "input",
+        "value": "RaidLose",
+        "display": "hide"
+      },
+      "SuccessInterval": {
+        "type": "input",
+        "value": 0,
+        "display": "hide"
+      },
+      "FailureInterval": {
+        "type": "input",
+        "value": 120,
+        "display": "hide"
+      },
+      "ServerUpdate": {
+        "type": "input",
+        "value": "00:00",
+        "display": "hide"
+      }
+    },
+    "RaidLose": {
+      "Mode": {
+        "type": "select",
+        "value": "easy",
+        "option": [
+          "easy",
+          "normal",
+          "hard"
+        ]
+      }
+    },
+    "Campaign": {
+      "Name": {
+        "type": "input",
+        "value": "dynamic",
+        "display": "hide"
+      },
+      "Event": {
+        "type": "select",
+        "value": "campaign_main",
+        "option": [
+          "raid_20260827"
+        ],
+        "option_cn": [
+          "raid_20260827"
+        ],
+        "option_en": [
+          "raid_20260827"
+        ],
+        "option_jp": [
+          "raid_20260827"
+        ],
+        "option_tw": [
+          "raid_20260827"
+        ],
+        "option_bold": [
+          "raid_20260827"
+        ]
+      },
+      "Mode": {
+        "type": "select",
+        "value": "normal",
+        "option": [
+          "normal",
+          "hard"
+        ],
+        "display": "hide"
+      },
+      "UseClearMode": {
+        "type": "checkbox",
+        "value": true,
+        "display": "hide"
+      },
+      "UseFleetLock": {
+        "type": "checkbox",
+        "value": true,
+        "display": "hide"
+      },
+      "UseAutoSearch": {
+        "type": "checkbox",
+        "value": false,
+        "display": "hide"
+      },
+      "Use2xBook": {
+        "type": "checkbox",
+        "value": false,
+        "display": "hide"
+      },
+      "AmbushEvade": {
+        "type": "checkbox",
+        "value": true,
+        "display": "hide"
+      }
+    },
+    "StopCondition": {
+      "OilLimit": {
+        "type": "input",
+        "value": 1000
+      },
+      "RunCount": {
+        "type": "input",
+        "value": 0
+      },
+      "MapAchievement": {
+        "type": "select",
+        "value": "non_stop",
+        "option": [
+          "non_stop",
+          "100_percent_clear",
+          "map_3_stars",
+          "threat_safe",
+          "threat_safe_without_3_stars"
+        ],
+        "display": "hide"
+      },
+      "StageIncrease": {
+        "type": "checkbox",
+        "value": false,
+        "display": "hide"
+      },
+      "GetNewShip": {
+        "type": "checkbox",
+        "value": false,
+        "display": "hide"
+      },
+      "ReachLevel": {
+        "type": "input",
+        "value": 0,
+        "display": "hide"
+      }
+    },
+    "Storage": {
+      "Storage": {
+        "type": "storage",
+        "value": {},
+        "valuetype": "ignore",
+        "display": "disabled"
+      }
+    }
+  },
   "Hospital": {
     "Scheduler": {
       "Enable": {

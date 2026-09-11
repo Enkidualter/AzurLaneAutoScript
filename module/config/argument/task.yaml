@@ -98,6 +98,11 @@ Event:
       - Campaign
       - StopCondition
       - Emotion
+    RaidLose:
+      - Scheduler
+      - RaidLose
+      - Campaign
+      - StopCondition
     Hospital:
       - Scheduler
       - Hospital
