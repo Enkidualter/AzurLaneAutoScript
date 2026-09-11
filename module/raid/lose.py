@@ -182,14 +182,58 @@ class RaidLose(RaidRun):
 
         return False
 
+    def raid_retry(self):
+        """
+        Click RAID_RETRY until it disappears.
+        RAID_RETRY is not clickable during its appear animation, so wait until it's stable.
+
+        Returns:
+            bool: If next battle is loading.
+
+        Pages:
+            in: defeat result page with RAID_RETRY
+            out: battle loading, or defeat result page if failed
+        """
+        logger.info('Raid retry')
+        stable_timer = Timer(1.5, count=3).start()
+        click_timer = Timer(2)
+        clicked = 0
+        disappear = 0
+        for _ in self.loop():
+            if self.appear(RAID_RETRY, offset=(20, 20)):
+                disappear = 0
+                if not stable_timer.reached():
+                    continue
+                if click_timer.reached():
+                    if clicked >= 5:
+                        logger.warning('Failed to click RAID_RETRY after 5 trials')
+                        return False
+                    logger.info(f'{RAID_RETRY} -> retry')
+                    self.device.click(RAID_RETRY)
+                    clicked += 1
+                    click_timer.reset()
+                continue
+
+            # End
+            disappear += 1
+            if disappear >= 2:
+                if clicked:
+                    logger.info('RAID_RETRY clicked, next battle is loading')
+                    return True
+                else:
+                    logger.warning('RAID_RETRY disappeared before clicking')
+                    return False
+
     def raid_expected_end(self):
         # Retry button on defeat result page
         if self.retry_decision and self.appear(RAID_RETRY, offset=(20, 20)):
-            logger.info(f'{RAID_RETRY} -> retry')
-            self.device.click(RAID_RETRY)
-            self.retried = True
-            self.oil -= RETRY_OIL_COST
-            return True
+            if self.raid_retry():
+                self.retried = True
+                self.oil -= RETRY_OIL_COST
+                return True
+            # Failed to retry, confirm and back to raid page
+            self.retry_decision = False
+            return False
         # Defeat tips page after D rank
         if self.appear_then_click(OPTS_INFO_D, offset=(30, 30), interval=3):
             return False
