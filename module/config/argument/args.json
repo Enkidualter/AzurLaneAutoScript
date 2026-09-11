@@ -3099,14 +3099,9 @@
       }
     },
     "RaidLose": {
-      "Mode": {
-        "type": "select",
-        "value": "easy",
-        "option": [
-          "easy",
-          "normal",
-          "hard"
-        ]
+      "StageFilter": {
+        "type": "textarea",
+        "value": "hard > normal > easy"
       }
     },
     "Campaign": {
@@ -3209,27 +3204,18 @@
         "display": "hide"
       }
     },
-    "Emotion": {
-      "Mode": {
-        "type": "select",
-        "value": "calculate",
-        "option": [
-          "calculate",
-          "ignore",
-          "calculate_ignore"
-        ]
-      },
-      "Fleet1Value": {
+    "RaidLoseEmotion": {
+      "HardValue": {
         "type": "input",
         "value": 119
       },
-      "Fleet1Record": {
+      "HardRecord": {
         "type": "datetime",
         "value": "2020-01-01 00:00:00",
         "validate": "datetime",
         "display": "disabled"
       },
-      "Fleet1Control": {
+      "HardControl": {
         "type": "select",
         "value": "prevent_green_face",
         "option": [
@@ -3239,7 +3225,7 @@
           "prevent_red_face"
         ]
       },
-      "Fleet1Recover": {
+      "HardRecover": {
         "type": "select",
         "value": "not_in_dormitory",
         "option": [
@@ -3248,46 +3234,75 @@
           "dormitory_floor_2"
         ]
       },
-      "Fleet1Oath": {
+      "HardOath": {
         "type": "checkbox",
         "value": false
       },
-      "Fleet2Value": {
+      "NormalValue": {
         "type": "input",
-        "value": 119,
-        "display": "hide"
+        "value": 119
       },
-      "Fleet2Record": {
+      "NormalRecord": {
         "type": "datetime",
         "value": "2020-01-01 00:00:00",
         "validate": "datetime",
-        "display": "hide"
+        "display": "disabled"
       },
-      "Fleet2Control": {
+      "NormalControl": {
         "type": "select",
-        "value": "prevent_yellow_face",
+        "value": "prevent_green_face",
         "option": [
           "keep_exp_bonus",
           "prevent_green_face",
           "prevent_yellow_face",
           "prevent_red_face"
-        ],
-        "display": "hide"
+        ]
       },
-      "Fleet2Recover": {
+      "NormalRecover": {
         "type": "select",
         "value": "not_in_dormitory",
         "option": [
           "not_in_dormitory",
           "dormitory_floor_1",
           "dormitory_floor_2"
-        ],
-        "display": "hide"
+        ]
       },
-      "Fleet2Oath": {
+      "NormalOath": {
         "type": "checkbox",
-        "value": false,
-        "display": "hide"
+        "value": false
+      },
+      "EasyValue": {
+        "type": "input",
+        "value": 119
+      },
+      "EasyRecord": {
+        "type": "datetime",
+        "value": "2020-01-01 00:00:00",
+        "validate": "datetime",
+        "display": "disabled"
+      },
+      "EasyControl": {
+        "type": "select",
+        "value": "prevent_green_face",
+        "option": [
+          "keep_exp_bonus",
+          "prevent_green_face",
+          "prevent_yellow_face",
+          "prevent_red_face"
+        ]
+      },
+      "EasyRecover": {
+        "type": "select",
+        "value": "not_in_dormitory",
+        "option": [
+          "not_in_dormitory",
+          "dormitory_floor_1",
+          "dormitory_floor_2"
+        ]
+      },
+      "EasyOath": {
+        "type": "checkbox",
+        "value": false
       }
     },
     "Storage": {

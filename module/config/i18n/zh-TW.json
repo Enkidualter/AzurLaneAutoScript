@@ -1360,14 +1360,98 @@
   "RaidLose": {
     "_info": {
       "name": "共鬥刷好感設定",
-      "help": "需要事先把隊伍配成必輸，心情按正常出擊計算。如果意外打贏，任務會自動關閉"
+      "help": "困難、普通、簡單需要各自配好必輸的隊伍，心情按正常出擊計算，按過濾器順序優先打有心情的難度。如果意外打贏，任務會自動關閉"
     },
-    "Mode": {
-      "name": "難度",
+    "StageFilter": {
+      "name": "難度優先級",
+      "help": "靠前的難度有心情且有次數就打它，否則往後順延"
+    }
+  },
+  "RaidLoseEmotion": {
+    "_info": {
+      "name": "共鬥刷好感心情設定",
+      "help": "三個難度的隊伍分別記錄心情，請先按遊戲內實際心情填寫目前心情值"
+    },
+    "HardValue": {
+      "name": "困難隊 目前心情",
+      "help": ""
+    },
+    "HardRecord": {
+      "name": "一隊心情紀錄時間",
+      "help": ""
+    },
+    "HardControl": {
+      "name": "困難隊 心情控制",
       "help": "",
-      "easy": "簡單",
-      "normal": "普通",
-      "hard": "困難"
+      "keep_exp_bonus": "保持經驗加成 (>120)",
+      "prevent_green_face": "防止綠臉 (>40)",
+      "prevent_yellow_face": "防止黃臉 (>30)",
+      "prevent_red_face": "防止紅臉 (>0)"
+    },
+    "HardRecover": {
+      "name": "困難隊 心情回復",
+      "help": "",
+      "not_in_dormitory": "未放置於後宅 (20/h)",
+      "dormitory_floor_1": "後宅一樓 (40/h)",
+      "dormitory_floor_2": "後宅二樓 (50/h)"
+    },
+    "HardOath": {
+      "name": "困難隊 全員已婚",
+      "help": ""
+    },
+    "NormalValue": {
+      "name": "普通隊 目前心情",
+      "help": ""
+    },
+    "NormalRecord": {
+      "name": "一隊心情紀錄時間",
+      "help": ""
+    },
+    "NormalControl": {
+      "name": "普通隊 心情控制",
+      "help": "",
+      "keep_exp_bonus": "保持經驗加成 (>120)",
+      "prevent_green_face": "防止綠臉 (>40)",
+      "prevent_yellow_face": "防止黃臉 (>30)",
+      "prevent_red_face": "防止紅臉 (>0)"
+    },
+    "NormalRecover": {
+      "name": "普通隊 心情回復",
+      "help": "",
+      "not_in_dormitory": "未放置於後宅 (20/h)",
+      "dormitory_floor_1": "後宅一樓 (40/h)",
+      "dormitory_floor_2": "後宅二樓 (50/h)"
+    },
+    "NormalOath": {
+      "name": "普通隊 全員已婚",
+      "help": ""
+    },
+    "EasyValue": {
+      "name": "簡單隊 目前心情",
+      "help": ""
+    },
+    "EasyRecord": {
+      "name": "一隊心情紀錄時間",
+      "help": ""
+    },
+    "EasyControl": {
+      "name": "簡單隊 心情控制",
+      "help": "",
+      "keep_exp_bonus": "保持經驗加成 (>120)",
+      "prevent_green_face": "防止綠臉 (>40)",
+      "prevent_yellow_face": "防止黃臉 (>30)",
+      "prevent_red_face": "防止紅臉 (>0)"
+    },
+    "EasyRecover": {
+      "name": "簡單隊 心情回復",
+      "help": "",
+      "not_in_dormitory": "未放置於後宅 (20/h)",
+      "dormitory_floor_1": "後宅一樓 (40/h)",
+      "dormitory_floor_2": "後宅二樓 (50/h)"
+    },
+    "EasyOath": {
+      "name": "簡單隊 全員已婚",
+      "help": ""
     }
   },
   "RaidDaily": {

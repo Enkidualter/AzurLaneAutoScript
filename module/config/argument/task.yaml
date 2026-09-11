@@ -103,7 +103,7 @@ Event:
       - RaidLose
       - Campaign
       - StopCondition
-      - Emotion
+      - RaidLoseEmotion
     Hospital:
       - Scheduler
       - Hospital

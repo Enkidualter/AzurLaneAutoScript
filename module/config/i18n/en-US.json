@@ -1360,14 +1360,98 @@
   "RaidLose": {
     "_info": {
       "name": "Raid Lose Settings",
-      "help": "Set up a fleet that is sure to be defeated, emotion is calculated as normal combats. Task will be disabled if won"
+      "help": "Set up a fleet sure to be defeated for each stage. Emotion is calculated as normal combats, stages with enough emotion are chosen in filter order. Task will be disabled if won"
     },
-    "Mode": {
-      "name": "Difficulty",
-      "help": "",
-      "easy": "Easy",
-      "normal": "Normal",
-      "hard": "Hard"
+    "StageFilter": {
+      "name": "Stage Priority",
+      "help": "Run the first stage that has remain and enough emotion"
+    }
+  },
+  "RaidLoseEmotion": {
+    "_info": {
+      "name": "Raid Lose Emotion",
+      "help": "Emotion is recorded for each stage fleet, fill in current emotion first"
+    },
+    "HardValue": {
+      "name": "Hard Fleet Emotion Value",
+      "help": ""
+    },
+    "HardRecord": {
+      "name": "Fleet 1 Emotion Record",
+      "help": ""
+    },
+    "HardControl": {
+      "name": "Hard Fleet Emotion Control",
+      "help": "Measures will be taken to ensure control is maintained i.e. wait for recovery in level or stop current task if others can be executed while waiting",
+      "keep_exp_bonus": "Keep Happy Bonus (>120)",
+      "prevent_green_face": "Keep Content (>40)",
+      "prevent_yellow_face": "Prevent Moody (>30)",
+      "prevent_red_face": "Prevent Exhausted (>20)"
+    },
+    "HardRecover": {
+      "name": "Hard Fleet Recover Location",
+      "help": "Configure accordingly to accurately calculate emotion",
+      "not_in_dormitory": "Docks (20/hr)",
+      "dormitory_floor_1": "Dorm Floor 1 (40/hr)",
+      "dormitory_floor_2": "Dorm Floor 2 (50/hr)"
+    },
+    "HardOath": {
+      "name": "Hard Fleet All Oath",
+      "help": "+10/hr emotion recovery is included into calculation"
+    },
+    "NormalValue": {
+      "name": "Normal Fleet Emotion Value",
+      "help": ""
+    },
+    "NormalRecord": {
+      "name": "Fleet 1 Emotion Record",
+      "help": ""
+    },
+    "NormalControl": {
+      "name": "Normal Fleet Emotion Control",
+      "help": "Measures will be taken to ensure control is maintained i.e. wait for recovery in level or stop current task if others can be executed while waiting",
+      "keep_exp_bonus": "Keep Happy Bonus (>120)",
+      "prevent_green_face": "Keep Content (>40)",
+      "prevent_yellow_face": "Prevent Moody (>30)",
+      "prevent_red_face": "Prevent Exhausted (>20)"
+    },
+    "NormalRecover": {
+      "name": "Normal Fleet Recover Location",
+      "help": "Configure accordingly to accurately calculate emotion",
+      "not_in_dormitory": "Docks (20/hr)",
+      "dormitory_floor_1": "Dorm Floor 1 (40/hr)",
+      "dormitory_floor_2": "Dorm Floor 2 (50/hr)"
+    },
+    "NormalOath": {
+      "name": "Normal Fleet All Oath",
+      "help": "+10/hr emotion recovery is included into calculation"
+    },
+    "EasyValue": {
+      "name": "Easy Fleet Emotion Value",
+      "help": ""
+    },
+    "EasyRecord": {
+      "name": "Fleet 1 Emotion Record",
+      "help": ""
+    },
+    "EasyControl": {
+      "name": "Easy Fleet Emotion Control",
+      "help": "Measures will be taken to ensure control is maintained i.e. wait for recovery in level or stop current task if others can be executed while waiting",
+      "keep_exp_bonus": "Keep Happy Bonus (>120)",
+      "prevent_green_face": "Keep Content (>40)",
+      "prevent_yellow_face": "Prevent Moody (>30)",
+      "prevent_red_face": "Prevent Exhausted (>20)"
+    },
+    "EasyRecover": {
+      "name": "Easy Fleet Recover Location",
+      "help": "Configure accordingly to accurately calculate emotion",
+      "not_in_dormitory": "Docks (20/hr)",
+      "dormitory_floor_1": "Dorm Floor 1 (40/hr)",
+      "dormitory_floor_2": "Dorm Floor 2 (50/hr)"
+    },
+    "EasyOath": {
+      "name": "Easy Fleet All Oath",
+      "help": "+10/hr emotion recovery is included into calculation"
     }
   },
   "RaidDaily": {

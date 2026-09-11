@@ -1360,14 +1360,98 @@
   "RaidLose": {
     "_info": {
       "name": "共斗刷好感设置",
-      "help": "需要事先把队伍配成必输，心情按正常出击计算。如果意外打赢，任务会自动关闭"
+      "help": "困难、普通、简单需要各自配好必输的队伍，心情按正常出击计算，按过滤器顺序优先打有心情的难度。如果意外打赢，任务会自动关闭"
     },
-    "Mode": {
-      "name": "难度",
+    "StageFilter": {
+      "name": "难度优先级",
+      "help": "靠前的难度有心情且有次数就打它，否则往后顺延"
+    }
+  },
+  "RaidLoseEmotion": {
+    "_info": {
+      "name": "共斗刷好感心情设置",
+      "help": "三个难度的队伍分别记录心情，请先按游戏内实际心情填写当前心情值"
+    },
+    "HardValue": {
+      "name": "困难队 当前心情",
+      "help": ""
+    },
+    "HardRecord": {
+      "name": "一队心情记录时间",
+      "help": ""
+    },
+    "HardControl": {
+      "name": "困难队 心情控制",
       "help": "",
-      "easy": "简单",
-      "normal": "普通",
-      "hard": "困难"
+      "keep_exp_bonus": "保持经验加成 (>120)",
+      "prevent_green_face": "防止绿脸 (>40)",
+      "prevent_yellow_face": "防止黄脸 (>30)",
+      "prevent_red_face": "防止红脸 (>0)"
+    },
+    "HardRecover": {
+      "name": "困难队 心情回复",
+      "help": "",
+      "not_in_dormitory": "未放置于后宅 (20/h)",
+      "dormitory_floor_1": "后宅一层 (40/h)",
+      "dormitory_floor_2": "后宅二层 (50/h)"
+    },
+    "HardOath": {
+      "name": "困难队 全员已婚",
+      "help": ""
+    },
+    "NormalValue": {
+      "name": "普通队 当前心情",
+      "help": ""
+    },
+    "NormalRecord": {
+      "name": "一队心情记录时间",
+      "help": ""
+    },
+    "NormalControl": {
+      "name": "普通队 心情控制",
+      "help": "",
+      "keep_exp_bonus": "保持经验加成 (>120)",
+      "prevent_green_face": "防止绿脸 (>40)",
+      "prevent_yellow_face": "防止黄脸 (>30)",
+      "prevent_red_face": "防止红脸 (>0)"
+    },
+    "NormalRecover": {
+      "name": "普通队 心情回复",
+      "help": "",
+      "not_in_dormitory": "未放置于后宅 (20/h)",
+      "dormitory_floor_1": "后宅一层 (40/h)",
+      "dormitory_floor_2": "后宅二层 (50/h)"
+    },
+    "NormalOath": {
+      "name": "普通队 全员已婚",
+      "help": ""
+    },
+    "EasyValue": {
+      "name": "简单队 当前心情",
+      "help": ""
+    },
+    "EasyRecord": {
+      "name": "一队心情记录时间",
+      "help": ""
+    },
+    "EasyControl": {
+      "name": "简单队 心情控制",
+      "help": "",
+      "keep_exp_bonus": "保持经验加成 (>120)",
+      "prevent_green_face": "防止绿脸 (>40)",
+      "prevent_yellow_face": "防止黄脸 (>30)",
+      "prevent_red_face": "防止红脸 (>0)"
+    },
+    "EasyRecover": {
+      "name": "简单队 心情回复",
+      "help": "",
+      "not_in_dormitory": "未放置于后宅 (20/h)",
+      "dormitory_floor_1": "后宅一层 (40/h)",
+      "dormitory_floor_2": "后宅二层 (50/h)"
+    },
+    "EasyOath": {
+      "name": "简单队 全员已婚",
+      "help": ""
     }
   },
   "RaidDaily": {

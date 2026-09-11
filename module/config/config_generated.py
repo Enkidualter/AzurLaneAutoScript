@@ -176,7 +176,24 @@ class GeneratedConfig:
     Raid_UseTicket = False
 
     # Group `RaidLose`
-    RaidLose_Mode = 'easy'  # easy, normal, hard
+    RaidLose_StageFilter = 'hard > normal > easy'
+
+    # Group `RaidLoseEmotion`
+    RaidLoseEmotion_HardValue = 119
+    RaidLoseEmotion_HardRecord = datetime.datetime(2020, 1, 1, 0, 0)
+    RaidLoseEmotion_HardControl = 'prevent_green_face'  # keep_exp_bonus, prevent_green_face, prevent_yellow_face, prevent_red_face
+    RaidLoseEmotion_HardRecover = 'not_in_dormitory'  # not_in_dormitory, dormitory_floor_1, dormitory_floor_2
+    RaidLoseEmotion_HardOath = False
+    RaidLoseEmotion_NormalValue = 119
+    RaidLoseEmotion_NormalRecord = datetime.datetime(2020, 1, 1, 0, 0)
+    RaidLoseEmotion_NormalControl = 'prevent_green_face'  # keep_exp_bonus, prevent_green_face, prevent_yellow_face, prevent_red_face
+    RaidLoseEmotion_NormalRecover = 'not_in_dormitory'  # not_in_dormitory, dormitory_floor_1, dormitory_floor_2
+    RaidLoseEmotion_NormalOath = False
+    RaidLoseEmotion_EasyValue = 119
+    RaidLoseEmotion_EasyRecord = datetime.datetime(2020, 1, 1, 0, 0)
+    RaidLoseEmotion_EasyControl = 'prevent_green_face'  # keep_exp_bonus, prevent_green_face, prevent_yellow_face, prevent_red_face
+    RaidLoseEmotion_EasyRecover = 'not_in_dormitory'  # not_in_dormitory, dormitory_floor_1, dormitory_floor_2
+    RaidLoseEmotion_EasyOath = False
 
     # Group `RaidDaily`
     RaidDaily_StageFilter = 'hard > normal > easy'

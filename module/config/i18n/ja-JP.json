@@ -1362,12 +1362,96 @@
       "name": "RaidLose._info.name",
       "help": "RaidLose._info.help"
     },
-    "Mode": {
-      "name": "RaidLose.Mode.name",
-      "help": "RaidLose.Mode.help",
-      "easy": "easy",
-      "normal": "normal",
-      "hard": "hard"
+    "StageFilter": {
+      "name": "RaidLose.StageFilter.name",
+      "help": "RaidLose.StageFilter.help"
+    }
+  },
+  "RaidLoseEmotion": {
+    "_info": {
+      "name": "RaidLoseEmotion._info.name",
+      "help": "RaidLoseEmotion._info.help"
+    },
+    "HardValue": {
+      "name": "RaidLoseEmotion.HardValue.name",
+      "help": "RaidLoseEmotion.HardValue.help"
+    },
+    "HardRecord": {
+      "name": "RaidLoseEmotion.HardRecord.name",
+      "help": "RaidLoseEmotion.HardRecord.help"
+    },
+    "HardControl": {
+      "name": "RaidLoseEmotion.HardControl.name",
+      "help": "RaidLoseEmotion.HardControl.help",
+      "keep_exp_bonus": "keep_exp_bonus",
+      "prevent_green_face": "prevent_green_face",
+      "prevent_yellow_face": "prevent_yellow_face",
+      "prevent_red_face": "prevent_red_face"
+    },
+    "HardRecover": {
+      "name": "RaidLoseEmotion.HardRecover.name",
+      "help": "RaidLoseEmotion.HardRecover.help",
+      "not_in_dormitory": "not_in_dormitory",
+      "dormitory_floor_1": "dormitory_floor_1",
+      "dormitory_floor_2": "dormitory_floor_2"
+    },
+    "HardOath": {
+      "name": "RaidLoseEmotion.HardOath.name",
+      "help": "RaidLoseEmotion.HardOath.help"
+    },
+    "NormalValue": {
+      "name": "RaidLoseEmotion.NormalValue.name",
+      "help": "RaidLoseEmotion.NormalValue.help"
+    },
+    "NormalRecord": {
+      "name": "RaidLoseEmotion.NormalRecord.name",
+      "help": "RaidLoseEmotion.NormalRecord.help"
+    },
+    "NormalControl": {
+      "name": "RaidLoseEmotion.NormalControl.name",
+      "help": "RaidLoseEmotion.NormalControl.help",
+      "keep_exp_bonus": "keep_exp_bonus",
+      "prevent_green_face": "prevent_green_face",
+      "prevent_yellow_face": "prevent_yellow_face",
+      "prevent_red_face": "prevent_red_face"
+    },
+    "NormalRecover": {
+      "name": "RaidLoseEmotion.NormalRecover.name",
+      "help": "RaidLoseEmotion.NormalRecover.help",
+      "not_in_dormitory": "not_in_dormitory",
+      "dormitory_floor_1": "dormitory_floor_1",
+      "dormitory_floor_2": "dormitory_floor_2"
+    },
+    "NormalOath": {
+      "name": "RaidLoseEmotion.NormalOath.name",
+      "help": "RaidLoseEmotion.NormalOath.help"
+    },
+    "EasyValue": {
+      "name": "RaidLoseEmotion.EasyValue.name",
+      "help": "RaidLoseEmotion.EasyValue.help"
+    },
+    "EasyRecord": {
+      "name": "RaidLoseEmotion.EasyRecord.name",
+      "help": "RaidLoseEmotion.EasyRecord.help"
+    },
+    "EasyControl": {
+      "name": "RaidLoseEmotion.EasyControl.name",
+      "help": "RaidLoseEmotion.EasyControl.help",
+      "keep_exp_bonus": "keep_exp_bonus",
+      "prevent_green_face": "prevent_green_face",
+      "prevent_yellow_face": "prevent_yellow_face",
+      "prevent_red_face": "prevent_red_face"
+    },
+    "EasyRecover": {
+      "name": "RaidLoseEmotion.EasyRecover.name",
+      "help": "RaidLoseEmotion.EasyRecover.help",
+      "not_in_dormitory": "not_in_dormitory",
+      "dormitory_floor_1": "dormitory_floor_1",
+      "dormitory_floor_2": "dormitory_floor_2"
+    },
+    "EasyOath": {
+      "name": "RaidLoseEmotion.EasyOath.name",
+      "help": "RaidLoseEmotion.EasyOath.help"
     }
   },
   "RaidDaily": {

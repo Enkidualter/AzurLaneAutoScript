@@ -591,7 +591,7 @@
       "ServerUpdate": "00:00"
     },
     "RaidLose": {
-      "Mode": "easy"
+      "StageFilter": "hard > normal > easy"
     },
     "Campaign": {
       "Name": "dynamic",
@@ -611,18 +611,22 @@
       "GetNewShip": false,
       "ReachLevel": 0
     },
-    "Emotion": {
-      "Mode": "calculate",
-      "Fleet1Value": 119,
-      "Fleet1Record": "2020-01-01 00:00:00",
-      "Fleet1Control": "prevent_green_face",
-      "Fleet1Recover": "not_in_dormitory",
-      "Fleet1Oath": false,
-      "Fleet2Value": 119,
-      "Fleet2Record": "2020-01-01 00:00:00",
-      "Fleet2Control": "prevent_yellow_face",
-      "Fleet2Recover": "not_in_dormitory",
-      "Fleet2Oath": false
+    "RaidLoseEmotion": {
+      "HardValue": 119,
+      "HardRecord": "2020-01-01 00:00:00",
+      "HardControl": "prevent_green_face",
+      "HardRecover": "not_in_dormitory",
+      "HardOath": false,
+      "NormalValue": 119,
+      "NormalRecord": "2020-01-01 00:00:00",
+      "NormalControl": "prevent_green_face",
+      "NormalRecover": "not_in_dormitory",
+      "NormalOath": false,
+      "EasyValue": 119,
+      "EasyRecord": "2020-01-01 00:00:00",
+      "EasyControl": "prevent_green_face",
+      "EasyRecover": "not_in_dormitory",
+      "EasyOath": false
     },
     "Storage": {
       "Storage": {}

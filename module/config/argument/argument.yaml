@@ -307,9 +307,42 @@ Raid:
     option: [ easy, normal, hard, ex ]
   UseTicket: false
 RaidLose:
-  Mode:
-    value: easy
-    option: [ easy, normal, hard ]
+  StageFilter: |-
+    hard > normal > easy
+RaidLoseEmotion:
+  HardValue: 119
+  HardRecord:
+    value: 2020-01-01 00:00:00
+    display: disabled
+  HardControl:
+    value: prevent_green_face
+    option: [ keep_exp_bonus, prevent_green_face, prevent_yellow_face, prevent_red_face ]
+  HardRecover:
+    value: not_in_dormitory
+    option: [ not_in_dormitory, dormitory_floor_1, dormitory_floor_2 ]
+  HardOath: false
+  NormalValue: 119
+  NormalRecord:
+    value: 2020-01-01 00:00:00
+    display: disabled
+  NormalControl:
+    value: prevent_green_face
+    option: [ keep_exp_bonus, prevent_green_face, prevent_yellow_face, prevent_red_face ]
+  NormalRecover:
+    value: not_in_dormitory
+    option: [ not_in_dormitory, dormitory_floor_1, dormitory_floor_2 ]
+  NormalOath: false
+  EasyValue: 119
+  EasyRecord:
+    value: 2020-01-01 00:00:00
+    display: disabled
+  EasyControl:
+    value: prevent_green_face
+    option: [ keep_exp_bonus, prevent_green_face, prevent_yellow_face, prevent_red_face ]
+  EasyRecover:
+    value: not_in_dormitory
+    option: [ not_in_dormitory, dormitory_floor_1, dormitory_floor_2 ]
+  EasyOath: false
 RaidDaily:
   StageFilter: |-
     hard > normal > easy
