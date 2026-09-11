@@ -5,8 +5,9 @@ from module.raid.run import RaidRun
 
 class RaidLose(RaidRun):
     """
-    Lose raid on purpose to farm affinity, raid defeat costs no emotion.
+    Lose raid on purpose to farm affinity.
     User should set up a fleet that is sure to be defeated.
+    Emotion is calculated as normal combats.
     """
     won = False
 
@@ -53,12 +54,10 @@ class RaidLose(RaidRun):
 
         if self.won:
             logger.critical('Fleet is supposed to be defeated in RaidLose, '
-                            'task disabled to protect emotion, please check your fleet')
+                            'task disabled, please check your fleet')
             self.config.Scheduler_Enable = False
             self.config.task_stop()
 
     def run(self, name='', mode='', total=0):
-        # Defeat costs no emotion
-        self.config.override(Emotion_Mode='ignore')
         mode = mode if mode else self.config.RaidLose_Mode
         super().run(name=name, mode=mode, total=total)

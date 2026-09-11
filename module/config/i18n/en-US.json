@@ -1360,7 +1360,7 @@
   "RaidLose": {
     "_info": {
       "name": "Raid Lose Settings",
-      "help": "Set up a fleet that is sure to be defeated, raid defeat costs no emotion. Task will be disabled if won"
+      "help": "Set up a fleet that is sure to be defeated, emotion is calculated as normal combats. Task will be disabled if won"
     },
     "Mode": {
       "name": "Difficulty",
