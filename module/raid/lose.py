@@ -1,15 +1,19 @@
 from datetime import datetime
 
 from module.base.decorator import cached_property
+from module.base.timer import Timer
 from module.combat.assets import BATTLE_STATUS_A, BATTLE_STATUS_B, BATTLE_STATUS_S, EXP_INFO_D, OPTS_INFO_D
 from module.combat.emotion import Emotion, FleetEmotion
 from module.exception import ScriptEnd
 from module.logger import logger
+from module.raid.assets import RAID_RETRY
 from module.raid.daily import STAGE_FILTER, RaidStage
 from module.raid.run import RaidRun
 from module.ui.page import page_campaign_menu, page_raid
 
 STAGES = ['hard', 'normal', 'easy']
+# Oil cost varies in stages, use a conservative value to estimate oil when retrying
+RETRY_OIL_COST = 60
 
 
 class RaidLoseFleetEmotion(FleetEmotion):
@@ -84,13 +88,33 @@ class RaidLose(RaidRun):
     Lose raid on purpose to farm affinity.
     User should set up fleets that are sure to be defeated, one fleet for each stage.
     Emotion is calculated as normal combats, stages are tried in order of RaidLose_StageFilter.
+
+    RAID_RETRY only appears on the defeat result page (together with EXP_INFO_D).
+    Click it to start next battle directly if current stage is still the one to run,
+    otherwise click confirm and back to page_raid to select stage again.
     """
     won = False
     stage = 'hard'
+    stages = STAGES
+    remains = {}
+    oil = 0
+    # Decision of this battle, None for not decided yet
+    retry_decision = None
+    # If clicked RAID_RETRY and next battle is loading
+    retried = False
 
     @cached_property
     def emotion(self):
         return RaidLoseEmotion(config=self.config)
+
+    @cached_property
+    def retry_wait_timer(self):
+        # RAID_RETRY may appear later than EXP_INFO_D
+        return Timer(3, count=6)
+
+    def get_oil(self, *args, **kwargs):
+        self.oil = super().get_oil(*args, **kwargs)
+        return self.oil
 
     def combat_preparation(self, balance_hp=False, emotion_reduce=False, auto='combat_auto', fleet_index=1):
         super().combat_preparation(balance_hp=balance_hp, emotion_reduce=emotion_reduce, auto=auto,
@@ -105,18 +129,67 @@ class RaidLose(RaidRun):
                     break
         return super().handle_battle_status(drop=drop)
 
+    def should_retry(self):
+        """
+        Returns:
+            bool: If run current stage again by RAID_RETRY.
+                Emotion of current battle is already reduced in combat_preparation().
+        """
+        if self.won:
+            return False
+        if self.config.StopCondition_RunCount == 1:
+            logger.info('Retry: no, this is the last run')
+            return False
+        if self.oil - RETRY_OIL_COST < max(500, self.config.StopCondition_OilLimit):
+            logger.info(f'Retry: no, estimated oil {self.oil} is low, check it in page_campaign_menu')
+            return False
+        # Higher priority stage recovered
+        for stage in self.stages:
+            if stage == self.stage:
+                break
+            if self.remains.get(stage, 0) > 0 and self.emotion.stage_recovered(stage) <= datetime.now():
+                logger.info(f'Retry: no, higher priority stage {stage} is available')
+                return False
+        if self.emotion.stage_recovered(self.stage) > datetime.now():
+            logger.info(f'Retry: no, stage {self.stage} needs emotion recover')
+            return False
+        if self.config.task_switched():
+            logger.info('Retry: no, task switched')
+            return False
+
+        logger.info(f'Retry: yes, stage {self.stage}')
+        return True
+
     def handle_exp_info(self):
         if super().handle_exp_info():
             return True
         if self.is_combat_executing():
             return False
-        if self.appear_then_click(EXP_INFO_D):
+        if self.appear(EXP_INFO_D):
+            if self.retry_decision is None:
+                self.retry_decision = self.should_retry()
+                self.retry_wait_timer.reset()
+            # Wait RAID_RETRY, it will be clicked in raid_expected_end()
+            if self.retry_decision and not self.retry_wait_timer.reached():
+                return False
+            if self.retry_decision:
+                logger.warning('Wait RAID_RETRY timeout, confirm and back to raid page')
+                self.retry_decision = False
+            self.device.click(EXP_INFO_D)
+            self.interval_reset(EXP_INFO_D)
             self.device.sleep((0.25, 0.5))
             return True
 
         return False
 
     def raid_expected_end(self):
+        # Retry button on defeat result page
+        if self.retry_decision and self.appear(RAID_RETRY, offset=(20, 20)):
+            logger.info(f'{RAID_RETRY} -> retry')
+            self.device.click(RAID_RETRY)
+            self.retried = True
+            self.oil -= RETRY_OIL_COST
+            return True
         # Defeat tips page after D rank
         if self.appear_then_click(OPTS_INFO_D, offset=(30, 30), interval=3):
             return False
@@ -131,13 +204,17 @@ class RaidLose(RaidRun):
             in: page_raid
         """
         STAGE_FILTER.load(self.config.RaidLose_StageFilter)
-        stages = [stage.name for stage in STAGE_FILTER.apply([RaidStage(stage) for stage in STAGES])]
+        self.stages = [stage.name for stage in STAGE_FILTER.apply([RaidStage(stage) for stage in STAGES])]
         self.emotion.show()
 
+        # Avoid ticket popup when free attempts run out
+        self.remains = {}
+        for stage in self.stages:
+            self.remains[stage] = self.get_remain(stage)
+
         waits = []
-        for stage in stages:
-            # Avoid ticket popup when free attempts run out
-            if self.get_remain(stage) <= 0:
+        for stage in self.stages:
+            if self.remains[stage] <= 0:
                 logger.info(f'Raid {stage} has no remain')
                 continue
             recovered = self.emotion.stage_recovered(stage)
@@ -165,28 +242,29 @@ class RaidLose(RaidRun):
         self.run_count = 0
         self.run_limit = self.config.StopCondition_RunCount
         while 1:
-            if self.event_time_limit_triggered():
-                self.config.task_stop()
+            if not self.retried:
+                if self.event_time_limit_triggered():
+                    self.config.task_stop()
 
-            # UI switches
-            if not self._raid_has_oil_icon:
-                self.ui_ensure(page_campaign_menu)
-                if self.triggered_stop_condition(oil_check=True, coin_check=True):
+                # UI switches
+                if not self._raid_has_oil_icon:
+                    self.ui_ensure(page_campaign_menu)
+                    if self.triggered_stop_condition(oil_check=True, coin_check=True):
+                        break
+
+                # UI ensure
+                self.device.stuck_record_clear()
+                self.device.click_record_clear()
+                self.ui_ensure(page_raid)
+                self.disable_event_on_raid()
+
+                stage = self.select_stage()
+                if stage is None:
                     break
-
-            # UI ensure
-            self.device.stuck_record_clear()
-            self.device.click_record_clear()
-            self.ui_ensure(page_raid)
-            self.disable_event_on_raid()
-
-            stage = self.select_stage()
-            if stage is None:
-                break
-            self.stage = stage
+                self.stage = stage
 
             # Log
-            logger.hr(f'{name}_{stage}', level=2)
+            logger.hr(f'{name}_{self.stage}' + (' (retry)' if self.retried else ''), level=2)
             if self.config.StopCondition_RunCount > 0:
                 logger.info(f'Count remain: {self.config.StopCondition_RunCount}')
             else:
@@ -194,10 +272,16 @@ class RaidLose(RaidRun):
 
             # Run
             self.won = False
+            self.retry_decision = None
             self.device.stuck_record_clear()
             self.device.click_record_clear()
             try:
-                self.raid_execute_once(mode=stage, raid=name)
+                if self.retried:
+                    # Already clicked RAID_RETRY, next battle is loading
+                    self.retried = False
+                    self.combat(balance_hp=False, expected_end=self.raid_expected_end)
+                else:
+                    self.raid_execute_once(mode=self.stage, raid=name)
             except ScriptEnd as e:
                 logger.hr('Script end')
                 logger.info(str(e))
@@ -213,6 +297,9 @@ class RaidLose(RaidRun):
             self.run_count += 1
             if self.config.StopCondition_RunCount:
                 self.config.StopCondition_RunCount -= 1
+            # Next battle is loading, stop conditions and task switch are checked in should_retry()
+            if self.retried:
+                continue
             # End
             if self.triggered_stop_condition():
                 break
