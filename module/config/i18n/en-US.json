@@ -1367,6 +1367,36 @@
       "help": "Run the first stage that has remain and enough emotion"
     }
   },
+  "RaidLoseFleet": {
+    "_info": {
+      "name": "Easy Fleet Auto Change",
+      "help": "RaidLoseFleet._info.help"
+    },
+    "ChangeEasyFleet": {
+      "name": "Change easy fleet when all fleets are out of emotion",
+      "help": "RaidLoseFleet.ChangeEasyFleet.help"
+    },
+    "VanguardLevelMin": {
+      "name": "Vanguard Min Level",
+      "help": "RaidLoseFleet.VanguardLevelMin.help"
+    },
+    "VanguardLevelMax": {
+      "name": "Vanguard Max Level",
+      "help": "RaidLoseFleet.VanguardLevelMax.help"
+    },
+    "VanguardFaction": {
+      "name": "Vanguard Faction",
+      "help": "RaidLoseFleet.VanguardFaction.help"
+    },
+    "MainLevelMin": {
+      "name": "Main Min Level",
+      "help": "RaidLoseFleet.MainLevelMin.help"
+    },
+    "MainLevelMax": {
+      "name": "Main Max Level",
+      "help": "RaidLoseFleet.MainLevelMax.help"
+    }
+  },
   "RaidLoseEmotion": {
     "_info": {
       "name": "Raid Lose Emotion",

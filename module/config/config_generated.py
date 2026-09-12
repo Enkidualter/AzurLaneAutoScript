@@ -178,6 +178,14 @@ class GeneratedConfig:
     # Group `RaidLose`
     RaidLose_StageFilter = 'hard > normal > easy'
 
+    # Group `RaidLoseFleet`
+    RaidLoseFleet_ChangeEasyFleet = False
+    RaidLoseFleet_VanguardLevelMin = 76
+    RaidLoseFleet_VanguardLevelMax = 100
+    RaidLoseFleet_VanguardFaction = 'eagle > royal > sakura > iron > dragon > sardegna > northern > iris > vichya > tulipa'
+    RaidLoseFleet_MainLevelMin = 2
+    RaidLoseFleet_MainLevelMax = 125
+
     # Group `RaidLoseEmotion`
     RaidLoseEmotion_HardValue = 119
     RaidLoseEmotion_HardRecord = datetime.datetime(2020, 1, 1, 0, 0)

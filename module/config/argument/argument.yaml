@@ -309,6 +309,14 @@ Raid:
 RaidLose:
   StageFilter: |-
     hard > normal > easy
+RaidLoseFleet:
+  ChangeEasyFleet: false
+  VanguardLevelMin: 76
+  VanguardLevelMax: 100
+  VanguardFaction: |-
+    eagle > royal > sakura > iron > dragon > sardegna > northern > iris > vichya > tulipa
+  MainLevelMin: 2
+  MainLevelMax: 125
 RaidLoseEmotion:
   HardValue: 119
   HardRecord:

@@ -8,6 +8,7 @@ from module.exception import ScriptEnd
 from module.logger import logger
 from module.raid.assets import RAID_RETRY
 from module.raid.daily import STAGE_FILTER, RaidStage
+from module.raid.lose_fleet import RaidLoseFleet
 from module.raid.run import RaidRun
 from module.ui.page import page_campaign_menu, page_raid
 
@@ -83,7 +84,7 @@ class RaidLoseEmotion(Emotion):
         return fleet.get_recovered(expected_reduce=self.reduce_per_battle)
 
 
-class RaidLose(RaidRun):
+class RaidLose(RaidRun, RaidLoseFleet):
     """
     Lose raid on purpose to farm affinity.
     User should set up fleets that are sure to be defeated, one fleet for each stage.
@@ -269,12 +270,44 @@ class RaidLose(RaidRun):
             return stage
 
         if waits:
+            # All fleets are out of emotion, try to change easy fleet and keep farming
+            if self.change_easy_fleet():
+                return 'easy'
             logger.info('All raid stages need emotion recover, delay task')
             self.config.task_delay(target=min(waits))
         else:
             logger.info('All raid stages have no remain, delay to server update')
             self.config.task_delay(server_update=True)
         return None
+
+    def change_easy_fleet(self):
+        """
+        Returns:
+            bool: If easy fleet is changed to ships with enough emotion.
+
+        Pages:
+            in: page_raid
+            out: RAID_FLEET_PREPARATION if changed, page_raid if not
+        """
+        if not self.config.RaidLoseFleet_ChangeEasyFleet:
+            return False
+        if 'easy' not in self.stages:
+            logger.info('Easy is not in stage filter, skip changing fleet')
+            return False
+        if self.remains.get('easy', 0) <= 0:
+            logger.info('Easy has no remain, skip changing fleet')
+            return False
+
+        emotion = self.raid_fleet_change(raid=self.config.Campaign_Event, stage='easy')
+        if not emotion:
+            logger.info('Failed to change easy fleet, not enough ships')
+            self.raid_fleet_select_quit()
+            return False
+
+        self.config.set_record(RaidLoseEmotion_EasyValue=emotion)
+        self.emotion.update()
+        self.emotion.show()
+        return True
 
     def run(self, name='', mode='', total=0):
         name = name if name else self.config.Campaign_Event

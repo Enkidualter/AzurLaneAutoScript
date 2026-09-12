@@ -101,6 +101,7 @@ Event:
     RaidLose:
       - Scheduler
       - RaidLose
+      - RaidLoseFleet
       - Campaign
       - StopCondition
       - RaidLoseEmotion

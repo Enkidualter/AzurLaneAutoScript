@@ -1367,6 +1367,36 @@
       "help": "RaidLose.StageFilter.help"
     }
   },
+  "RaidLoseFleet": {
+    "_info": {
+      "name": "RaidLoseFleet._info.name",
+      "help": "RaidLoseFleet._info.help"
+    },
+    "ChangeEasyFleet": {
+      "name": "RaidLoseFleet.ChangeEasyFleet.name",
+      "help": "RaidLoseFleet.ChangeEasyFleet.help"
+    },
+    "VanguardLevelMin": {
+      "name": "RaidLoseFleet.VanguardLevelMin.name",
+      "help": "RaidLoseFleet.VanguardLevelMin.help"
+    },
+    "VanguardLevelMax": {
+      "name": "RaidLoseFleet.VanguardLevelMax.name",
+      "help": "RaidLoseFleet.VanguardLevelMax.help"
+    },
+    "VanguardFaction": {
+      "name": "RaidLoseFleet.VanguardFaction.name",
+      "help": "RaidLoseFleet.VanguardFaction.help"
+    },
+    "MainLevelMin": {
+      "name": "RaidLoseFleet.MainLevelMin.name",
+      "help": "RaidLoseFleet.MainLevelMin.help"
+    },
+    "MainLevelMax": {
+      "name": "RaidLoseFleet.MainLevelMax.name",
+      "help": "RaidLoseFleet.MainLevelMax.help"
+    }
+  },
   "RaidLoseEmotion": {
     "_info": {
       "name": "RaidLoseEmotion._info.name",

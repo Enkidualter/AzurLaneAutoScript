@@ -1367,6 +1367,36 @@
       "help": "靠前的难度有心情且有次数就打它，否则往后顺延"
     }
   },
+  "RaidLoseFleet": {
+    "_info": {
+      "name": "简单队自动换人",
+      "help": "RaidLoseFleet._info.help"
+    },
+    "ChangeEasyFleet": {
+      "name": "三队心情都不够时更换简单队",
+      "help": "RaidLoseFleet.ChangeEasyFleet.help"
+    },
+    "VanguardLevelMin": {
+      "name": "前排最低等级",
+      "help": "RaidLoseFleet.VanguardLevelMin.help"
+    },
+    "VanguardLevelMax": {
+      "name": "前排最高等级",
+      "help": "RaidLoseFleet.VanguardLevelMax.help"
+    },
+    "VanguardFaction": {
+      "name": "前排阵营",
+      "help": "RaidLoseFleet.VanguardFaction.help"
+    },
+    "MainLevelMin": {
+      "name": "后排最低等级",
+      "help": "RaidLoseFleet.MainLevelMin.help"
+    },
+    "MainLevelMax": {
+      "name": "后排最高等级",
+      "help": "RaidLoseFleet.MainLevelMax.help"
+    }
+  },
   "RaidLoseEmotion": {
     "_info": {
       "name": "共斗刷好感心情设置",

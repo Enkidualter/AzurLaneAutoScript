@@ -3104,6 +3104,32 @@
         "value": "hard > normal > easy"
       }
     },
+    "RaidLoseFleet": {
+      "ChangeEasyFleet": {
+        "type": "checkbox",
+        "value": false
+      },
+      "VanguardLevelMin": {
+        "type": "input",
+        "value": 76
+      },
+      "VanguardLevelMax": {
+        "type": "input",
+        "value": 100
+      },
+      "VanguardFaction": {
+        "type": "input",
+        "value": "eagle > royal > sakura > iron > dragon > sardegna > northern > iris > vichya > tulipa"
+      },
+      "MainLevelMin": {
+        "type": "input",
+        "value": 2
+      },
+      "MainLevelMax": {
+        "type": "input",
+        "value": 125
+      }
+    },
     "Campaign": {
       "Name": {
         "type": "input",
