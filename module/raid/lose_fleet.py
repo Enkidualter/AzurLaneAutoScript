@@ -1,11 +1,17 @@
+from dataclasses import replace
+
+import cv2
+import numpy as np
+
 from module.base.button import Button, ButtonGrid
+from module.base.timer import Timer
+from module.base.utils import crop
 from module.combat.emotion import DIC_LIMIT
 from module.logger import logger
 from module.raid.assets import RAID_FLEET_PREPARATION
 from module.raid.raid import raid_entrance
 from module.retire.assets import DOCK_CHECK
 from module.retire.dock import DOCK_SCROLL, Dock
-from module.base.timer import Timer
 from module.retire.scanner import LevelScanner, ShipScanner
 from module.ui.page import page_raid
 
@@ -18,6 +24,11 @@ FLEET_VANGUARD = ButtonGrid(
 # Close button of fleet select page, click only, never matched
 FLEET_SELECT_QUIT = Button(
     area=(1128, 66, 1192, 117), color=(), button=(1128, 66, 1192, 117), name='RAID_FLEET_SELECT_QUIT')
+# Ship card layout in dock, see CARD_GRIDS in module/retire/dock.py
+CARD_AREA = (93, 0, 1218, 720)
+CARD_ROW_TOP = [76, 303]
+CARD_ROW_DELTA = 227
+CARD_GAP_MIN = 8
 # Emotion recorded after a whole fleet is changed
 CHANGED_FLEET_EMOTION = 119
 # Non-collab factions, to exclude META, TEMPESTA, and others
@@ -94,33 +105,72 @@ class RaidLoseFleet(Dock):
         self.dock_select_confirm(check_button=RAID_FLEET_PREPARATION)
         return ship
 
-    def wait_dock_cards_loaded(self, timeout=3):
+    @staticmethod
+    def dock_card_offset(image):
         """
-        Ship cards are rendered after scrolling, level ocr gets 0 on a blank card,
-        wait until cards are rendered, otherwise ships would be considered not matched.
+        Dock scrolls by pixel, so ship cards are not aligned to CARD_GRIDS after scrolling,
+        an offset of 10px is enough to make level ocr read nothing.
+        Gaps between card rows are flat background having a much lower std,
+        so card rows can be located by finding the gaps.
 
         Returns:
-            bool: If cards loaded
+            int: Vertical offset of ship cards against CARD_GRIDS, or None if no gap found
+        """
+        strip = crop(image, CARD_AREA, copy=False)
+        gray = cv2.cvtColor(strip, cv2.COLOR_BGR2GRAY)
+        std = np.std(gray, axis=1)
+        flat = std < np.mean(std) * 0.5
+
+        # Bottom of a gap is the top of a card row
+        tops = []
+        count = 0
+        for y, is_flat in enumerate(flat):
+            if is_flat:
+                count += 1
+            else:
+                if count >= CARD_GAP_MIN:
+                    tops.append(y)
+                count = 0
+        if not tops:
+            return None
+
+        offsets = [min([top - expected for expected in CARD_ROW_TOP], key=abs) for top in tops]
+        offsets = [offset for offset in offsets if abs(offset) <= CARD_ROW_DELTA // 2]
+        if not offsets:
+            return None
+        return int(np.median(offsets))
+
+    def dock_scan_aligned(self, scanner, timeout=3):
+        """
+        Scan ships on current dock page, aligning cards to CARD_GRIDS first.
+        Cards are also rendered one by one after scrolling, so retry until any level is read.
+
+        Args:
+            scanner (ShipScanner):
+            timeout (int, float):
+
+        Returns:
+            list[Ship]: Matched ships, buttons are moved to where cards really are
 
         Pages:
             in: DOCK_CHECK
         """
-        scanner = LevelScanner()
         timer = Timer(timeout, count=int(timeout / 0.3)).start()
-        prev = None
         while 1:
-            levels = scanner.scan(self.device.image, output=False)
-            # A full page is rendered
-            if levels and all(level > 0 for level in levels):
-                return True
-            # Last page may have empty cards, wait until ocr results stop changing
-            if levels and any(level > 0 for level in levels) and levels == prev:
-                return True
+            image = self.device.image
+            offset = self.dock_card_offset(image)
+            if offset is not None:
+                aligned = np.roll(image, -offset, axis=0)
+                levels = LevelScanner().scan(aligned, output=False)
+                if levels and any(level > 0 for level in levels):
+                    logger.attr('Dock card offset', offset)
+                    ships = scanner.scan(aligned, output=True)
+                    # Ship is a frozen dataclass, rebuild them with buttons at real positions
+                    return [replace(ship, button=ship.button.move((0, offset))) for ship in ships]
             if timer.reached():
-                logger.warning(f'Wait dock cards loading timeout, levels: {levels}')
-                return False
+                logger.warning('Scan dock page timeout, no ship card was read')
+                return []
 
-            prev = levels
             self.device.screenshot()
 
     def dock_scan_pages(self, scanner, max_page=10):
@@ -144,8 +194,7 @@ class RaidLoseFleet(Dock):
             self.handle_dock_cards_loading()
 
         for page in range(max_page):
-            self.wait_dock_cards_loaded()
-            ships = scanner.scan(self.device.image, output=True)
+            ships = self.dock_scan_aligned(scanner)
             if ships:
                 return ships[0]
 
