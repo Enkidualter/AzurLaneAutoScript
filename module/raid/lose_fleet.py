@@ -4,7 +4,7 @@ from module.logger import logger
 from module.raid.assets import RAID_FLEET_PREPARATION
 from module.raid.raid import raid_entrance
 from module.retire.assets import DOCK_CHECK
-from module.retire.dock import Dock
+from module.retire.dock import DOCK_SCROLL, Dock
 from module.retire.scanner import ShipScanner
 from module.ui.page import page_raid
 
@@ -48,9 +48,10 @@ class RaidLoseFleet(Dock):
         control = getattr(self.config, f'RaidLoseEmotion_{stage.capitalize()}Control')
         return DIC_LIMIT[control] + self.emotion.reduce_per_battle
 
-    def fleet_select_ship(self, slot, index, faction, level, min_emotion, selected):
+    def fleet_select_ship(self, slot, index, faction, level, min_emotion):
         """
         Open dock from a fleet slot and select a ship with the lowest intimacy.
+        Ships already in this raid fleet are in status 'in_event_fleet', so they won't be selected again.
 
         Args:
             slot (Button): Ship slot on fleet select page
@@ -58,7 +59,6 @@ class RaidLoseFleet(Dock):
             faction (str, list): Dock faction filter
             level (tuple): (lower, upper)
             min_emotion (int):
-            selected (list[int]): Buttons already used in this fleet change
 
         Returns:
             Ship: Selected ship, or None if no ship matched
@@ -77,22 +77,54 @@ class RaidLoseFleet(Dock):
 
         scanner = ShipScanner(level=level, emotion=(min_emotion, 150), fleet=0, status='free')
         scanner.disable('rarity')
-        ships = scanner.scan(self.device.image, output=True)
-        ships = [ship for ship in ships if ship.button.area not in selected]
+        ship = self.dock_scan_pages(scanner)
 
-        if not ships:
+        if ship is None:
             logger.warning(f'No ship matched for slot {slot}, keep current ship')
             self.dock_reset()
             self.dock_quit()
             return None
 
-        ship = ships[0]
         logger.info(f'Select ship level={ship.level} emotion={ship.emotion}')
-        selected.append(ship.button.area)
         self.dock_select_one(ship.button)
         self.dock_reset()
         self.dock_select_confirm(check_button=RAID_FLEET_PREPARATION)
         return ship
+
+    def dock_scan_pages(self, scanner, max_page=10):
+        """
+        Scan dock page by page, dock list is sorted by intimacy in ascending order,
+        so the first matched ship is the one with the lowest intimacy.
+
+        Args:
+            scanner (ShipScanner):
+            max_page (int): Max pages to scan
+
+        Returns:
+            Ship: First matched ship, or None
+
+        Pages:
+            in: DOCK_CHECK
+            out: DOCK_CHECK
+        """
+        if DOCK_SCROLL.appear(main=self):
+            DOCK_SCROLL.set_top(main=self)
+            self.handle_dock_cards_loading()
+
+        for page in range(max_page):
+            ships = scanner.scan(self.device.image, output=True)
+            if ships:
+                return ships[0]
+
+            if not DOCK_SCROLL.appear(main=self) or DOCK_SCROLL.at_bottom(main=self):
+                logger.info(f'No more dock pages, scanned {page + 1} pages')
+                return None
+            logger.info(f'No ship matched in page {page + 1}, next page')
+            DOCK_SCROLL.next_page(main=self)
+            self.handle_dock_cards_loading()
+
+        logger.warning(f'Reached max dock pages {max_page}')
+        return None
 
     def raid_fleet_change(self, raid, stage='easy'):
         """
@@ -119,14 +151,13 @@ class RaidLoseFleet(Dock):
                       check_button=RAID_FLEET_PREPARATION, offset=(20, 20), retry_wait=3,
                       skip_first_screenshot=True)
 
-        selected = []
         emotions = []
         # Vanguard, 3 ships with faction and level limit
         for slot in FLEET_VANGUARD.buttons:
             ship = self.fleet_select_ship(
                 slot=slot, index='vanguard', faction=self.get_vanguard_faction(),
                 level=(self.config.RaidLoseFleet_VanguardLevelMin, self.config.RaidLoseFleet_VanguardLevelMax),
-                min_emotion=min_emotion, selected=selected)
+                min_emotion=min_emotion)
             if ship is None:
                 return 0
             emotions.append(ship.emotion)
@@ -134,7 +165,7 @@ class RaidLoseFleet(Dock):
         ship = self.fleet_select_ship(
             slot=FLEET_MAIN.buttons[0], index='main', faction='all',
             level=(self.config.RaidLoseFleet_MainLevelMin, self.config.RaidLoseFleet_MainLevelMax),
-            min_emotion=min_emotion, selected=selected)
+            min_emotion=min_emotion)
         if ship is None:
             return 0
         emotions.append(ship.emotion)
