@@ -29,6 +29,7 @@ CARD_AREA = (93, 0, 1218, 720)
 CARD_ROW_TOP = [76, 303]
 CARD_ROW_DELTA = 227
 CARD_GAP_MIN = 8
+CARD_SWIPE_BOX = (150, 100, 1150, 660)
 # Emotion recorded after a whole fleet is changed
 CHANGED_FLEET_EMOTION = 119
 # Non-collab factions, to exclude META, TEMPESTA, and others
@@ -173,10 +174,13 @@ class RaidLoseFleet(Dock):
 
             self.device.screenshot()
 
-    def dock_scan_pages(self, scanner, max_page=10):
+    def dock_scan_pages(self, scanner, max_page=40):
         """
         Scan dock page by page, dock list is sorted by intimacy in ascending order,
         so the first matched ship is the one with the lowest intimacy.
+
+        A dock screen shows 3 rows of ships but CARD_GRIDS only covers the first 2 rows,
+        so scroll one row each time to have an overlap, no ship would be skipped.
 
         Args:
             scanner (ShipScanner):
@@ -199,14 +203,17 @@ class RaidLoseFleet(Dock):
                 return ships[0]
 
             if not DOCK_SCROLL.appear(main=self) or DOCK_SCROLL.at_bottom(main=self):
-                logger.info(f'No more dock pages, scanned {page + 1} pages')
+                logger.info(f'Reached the bottom of dock, scanned {page + 1} pages')
                 return None
-            logger.info(f'No ship matched in page {page + 1}, next page')
-            DOCK_SCROLL.next_page(main=self)
+            logger.info(f'No ship matched in page {page + 1}, scroll one row')
+            self.device.swipe_vector((0, -CARD_ROW_DELTA), box=CARD_SWIPE_BOX, name='DOCK_SWIPE')
             # Scrolling through dock pages is not a stuck, clear click record
             self.device.click_record_clear()
             self.device.stuck_record_clear()
             self.handle_dock_cards_loading()
+
+        logger.warning(f'Reached max dock pages {max_page}')
+        return None
 
         logger.warning(f'Reached max dock pages {max_page}')
         return None
