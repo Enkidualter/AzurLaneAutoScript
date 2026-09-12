@@ -17,6 +17,8 @@ FLEET_VANGUARD = ButtonGrid(
 # Close button of fleet select page, click only, never matched
 FLEET_SELECT_QUIT = Button(
     area=(1128, 66, 1192, 117), color=(), button=(1128, 66, 1192, 117), name='RAID_FLEET_SELECT_QUIT')
+# Emotion recorded after a whole fleet is changed
+CHANGED_FLEET_EMOTION = 119
 # Non-collab factions, to exclude META, TEMPESTA, and others
 FACTION_ALL = ['eagle', 'royal', 'sakura', 'iron', 'dragon', 'sardegna',
                'northern', 'iris', 'vichya', 'tulipa', 'pedreria', 'meta', 'tempesta', 'other']
@@ -170,9 +172,11 @@ class RaidLoseFleet(Dock):
             return 0
         emotions.append(ship.emotion)
 
-        emotion = min(emotions)
-        logger.info(f'Raid fleet changed, fleet emotion: {emotion}')
-        return emotion
+        # Dock emotion ocr reads the mood icon which is not accurate,
+        # all ships are changed so just record a full emotion
+        logger.info(f'Raid fleet changed, scanned emotion: {emotions}, '
+                    f'record fleet emotion as {CHANGED_FLEET_EMOTION}')
+        return CHANGED_FLEET_EMOTION
 
     def raid_fleet_select_quit(self):
         """
