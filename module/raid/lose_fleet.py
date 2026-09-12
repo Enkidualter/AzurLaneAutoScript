@@ -5,7 +5,8 @@ from module.raid.assets import RAID_FLEET_PREPARATION
 from module.raid.raid import raid_entrance
 from module.retire.assets import DOCK_CHECK
 from module.retire.dock import DOCK_SCROLL, Dock
-from module.retire.scanner import ShipScanner
+from module.base.timer import Timer
+from module.retire.scanner import LevelScanner, ShipScanner
 from module.ui.page import page_raid
 
 # Ship slots on raid fleet select page (艦隊選擇)
@@ -93,6 +94,35 @@ class RaidLoseFleet(Dock):
         self.dock_select_confirm(check_button=RAID_FLEET_PREPARATION)
         return ship
 
+    def wait_dock_cards_loaded(self, timeout=3):
+        """
+        Ship cards are rendered after scrolling, level ocr gets 0 on a blank card,
+        wait until cards are rendered, otherwise ships would be considered not matched.
+
+        Returns:
+            bool: If cards loaded
+
+        Pages:
+            in: DOCK_CHECK
+        """
+        scanner = LevelScanner()
+        timer = Timer(timeout, count=int(timeout / 0.3)).start()
+        prev = None
+        while 1:
+            levels = scanner.scan(self.device.image, output=False)
+            # A full page is rendered
+            if levels and all(level > 0 for level in levels):
+                return True
+            # Last page may have empty cards, wait until ocr results stop changing
+            if levels and any(level > 0 for level in levels) and levels == prev:
+                return True
+            if timer.reached():
+                logger.warning(f'Wait dock cards loading timeout, levels: {levels}')
+                return False
+
+            prev = levels
+            self.device.screenshot()
+
     def dock_scan_pages(self, scanner, max_page=10):
         """
         Scan dock page by page, dock list is sorted by intimacy in ascending order,
@@ -114,6 +144,7 @@ class RaidLoseFleet(Dock):
             self.handle_dock_cards_loading()
 
         for page in range(max_page):
+            self.wait_dock_cards_loaded()
             ships = scanner.scan(self.device.image, output=True)
             if ships:
                 return ships[0]
@@ -123,6 +154,9 @@ class RaidLoseFleet(Dock):
                 return None
             logger.info(f'No ship matched in page {page + 1}, next page')
             DOCK_SCROLL.next_page(main=self)
+            # Scrolling through dock pages is not a stuck, clear click record
+            self.device.click_record_clear()
+            self.device.stuck_record_clear()
             self.handle_dock_cards_loading()
 
         logger.warning(f'Reached max dock pages {max_page}')
